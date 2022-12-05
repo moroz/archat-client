@@ -1,6 +1,6 @@
 import "./App.css";
 import type { Instance } from "simple-peer";
-const Peer = require("simple-peer/simplepeer.min.js");
+import SimplePeer from "simple-peer/simplepeer.min.js";
 import SignalSocket from "./socket";
 import { useCallback, useRef } from "react";
 
@@ -19,7 +19,7 @@ function App() {
 
   const onStart = useCallback(async () => {
     const stream = await getVideoStream();
-    peer.current = new Peer({ initiator: true, stream });
+    peer.current = new SimplePeer({ initiator: true, stream });
 
     peer.current?.on("signal", (data: any) => {
       SignalSocket.instance.broadcast(JSON.stringify(data));
