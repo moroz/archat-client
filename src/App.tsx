@@ -1,5 +1,7 @@
 import "./App.css";
-import * as Peer from "simple-peer/simplepeer.min.js";
+import type { Instance } from "simple-peer";
+const Peer = require("simple-peer/simplepeer.min.js");
+import SignalSocket from "./socket";
 import { useCallback, useRef } from "react";
 
 function getVideoStream() {
@@ -13,26 +15,23 @@ function App() {
   const sourceVideoRef = useRef<HTMLVideoElement | null>(null);
   const targetVideoRef = useRef<HTMLVideoElement | null>(null);
 
-  const peer1ref = useRef<Peer.Instance | null>();
-  const peer2ref = useRef<Peer.Instance | null>();
+  const peer = useRef<Instance | null>();
 
   const onStart = useCallback(async () => {
     const stream = await getVideoStream();
-    peer1ref.current = new Peer({ initiator: true, stream });
-    peer2ref.current = new Peer();
+    peer.current = new Peer({ initiator: true, stream });
 
-    peer1ref.current.on("signal", (data: any) => {
-      console.log("peer 1 signal", data);
-      peer2ref.current?.signal(data);
+    peer.current?.on("signal", (data: any) => {
+      SignalSocket.instance.broadcast(JSON.stringify(data));
     });
 
-    peer2ref.current?.on("signal", (data: any) => {
-      console.log("peer 2 signal", data);
-      peer1ref.current?.signal(data);
-    });
-
-    peer2ref.current.on("stream", (stream: any) => {
+    peer.current?.on("stream", (stream: any) => {
       targetVideoRef.current!.srcObject = stream;
+    });
+
+    SignalSocket.instance.onMessage((message) => {
+      if (Array.isArray(message)) return;
+      peer.current?.signal(message);
     });
 
     try {
