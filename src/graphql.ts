@@ -18,6 +18,9 @@ const httpLink = (token: string) => {
     uri: `${BASE_URL}/graphql`,
     headers: {
       authorization: `Bearer ${token}`
+    },
+    fetchOptions: {
+      cors: true
     }
   });
 };

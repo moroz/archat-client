@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { signIn } from "./api";
 import ChatView from "./ChatView";
 import { initializeClient } from "./graphql";
+import Chatrooms from "./views/Chatrooms";
 
 interface Props {}
 
@@ -22,7 +23,7 @@ const App: React.FC<Props> = () => {
 
   return (
     <ApolloProvider client={client!}>
-      <ChatView />
+      <Chatrooms />
     </ApolloProvider>
   );
 };
