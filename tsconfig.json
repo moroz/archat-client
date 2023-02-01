@@ -17,6 +17,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@api": ["./src/api"],
+      "@config": ["./src/config"],
       "@interfaces": ["./src/interfaces"],
       "@api/*": ["./src/api/*"],
       "@views/*": ["./src/views/*"],

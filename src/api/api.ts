@@ -1,4 +1,4 @@
-export const BASE_URL = import.meta.env.VITE_API_URL;
+import { BASE_URL } from "@config";
 
 export interface SignInParams {
   username: string;

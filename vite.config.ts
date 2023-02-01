@@ -10,6 +10,7 @@ export default defineConfig({
       "@components": path.resolve(__dirname, "src/components"),
       "@views": path.resolve(__dirname, "src/views"),
       "@api": path.resolve(__dirname, "src/api"),
+      "@config": path.resolve(__dirname, "src/config"),
       "@hooks": path.resolve(__dirname, "src/hooks"),
       "@": path.resolve(__dirname, "src"),
       "@css": path.resolve(__dirname, "src/css"),

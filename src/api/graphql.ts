@@ -1,8 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache, split } from "@apollo/client";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
-import { WEBSOCKET_URL } from "./socket";
-import { BASE_URL } from "./api";
+import { WEBSOCKET_URL, BASE_URL } from "@config";
 import { getMainDefinition } from "@apollo/client/utilities";
 
 const wsLink = (token: string) =>
