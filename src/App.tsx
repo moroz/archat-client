@@ -1,8 +1,6 @@
 import { ApolloProvider } from "@apollo/client";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { signIn } from "./api";
-import ChatView from "./ChatView";
-import { initializeClient } from "./graphql";
+import React, { useEffect, useMemo, useState } from "react";
+import { signIn, initializeClient } from "@api";
 import Chatrooms from "./views/Chatrooms";
 
 interface Props {}
