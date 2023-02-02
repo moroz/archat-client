@@ -1,5 +1,8 @@
 import React, { useCallback } from "react";
 import { useCreateChatroomMutation, useListChatroomsQuery } from "@api";
+import Layout from "@views/Layout";
+import ChatroomCard from "./ChatroomCard";
+import styles from "./Chatrooms.module.sass";
 
 interface Props {}
 
@@ -20,14 +23,18 @@ const Chatrooms: React.FC<Props> = () => {
   }, []);
 
   return (
-    <main>
-      <div>{JSON.stringify(data, null, 2)}</div>
+    <Layout>
+      <div className={styles.grid}>
+        {data?.chatrooms.map((chatroom) => (
+          <ChatroomCard key={chatroom.id} chatroom={chatroom} />
+        ))}
+      </div>
       <div>
         <button type="button" onClick={onCreateChatroom}>
           建立聊天室
         </button>
       </div>
-    </main>
+    </Layout>
   );
 };
 
