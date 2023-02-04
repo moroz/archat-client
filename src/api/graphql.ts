@@ -7,8 +7,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 const wsLink = (token: string) =>
   new GraphQLWsLink(
     createClient({
-      url: WEBSOCKET_URL,
-      connectionParams: { token }
+      url: WEBSOCKET_URL + `?token=${token}`
     })
   );
 
