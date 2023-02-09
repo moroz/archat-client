@@ -8,6 +8,13 @@ export const JOIN_CHATROOM_SUBSCRIPTION = gql`
       sender
       recipient
       offer
+      chatroom {
+        id
+        name
+        members {
+          id
+        }
+      }
     }
   }
 `;

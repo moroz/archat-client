@@ -1,5 +1,5 @@
 import { Chatroom } from "@interfaces";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, QueryHookOptions, useMutation, useQuery } from "@apollo/client";
 
 export const LIST_CHATROOMS = gql`
   query ListChatrooms {
@@ -47,3 +47,33 @@ export const useCreateChatroomMutation = () =>
   useMutation<CreateChatroomMutationResult, CreateChatroomMutationVariables>(
     CREATE_CHATROOM
   );
+
+export const GET_CHATROOM = gql`
+  query GetChatroom($id: ID!) {
+    chatroom(id: $id) {
+      id
+      name
+      members {
+        id
+        isHuman
+      }
+    }
+  }
+`;
+
+export interface GetChatroomResult {
+  chatroom: Chatroom | null;
+}
+
+export interface GetChatroomVariables {
+  id: string;
+}
+
+export const useGetChatroomQuery = (
+  id: string,
+  opts?: QueryHookOptions<GetChatroomResult, GetChatroomVariables>
+) =>
+  useQuery<GetChatroomResult, GetChatroomVariables>(GET_CHATROOM, {
+    variables: { id },
+    ...opts
+  });
