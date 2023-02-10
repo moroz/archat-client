@@ -1,9 +1,19 @@
 import { ChatroomEvent } from "@/interfaces/events";
 import { gql, SubscriptionHookOptions, useSubscription } from "@apollo/client";
+import { nanoid } from "nanoid";
+
+export const SESSION_ID = (() => {
+  const existing = sessionStorage.getItem("SESSION_ID");
+  if (existing) return existing;
+
+  const newID = nanoid();
+  sessionStorage.setItem("SESSION_ID", newID);
+  return newID;
+})();
 
 export const JOIN_CHATROOM_SUBSCRIPTION = gql`
-  subscription JoinChatroom($chatroomId: ID!) {
-    events: joinChatroom(chatroomId: $chatroomId) {
+  subscription JoinChatroom($chatroomID: ID!, $sessionID: ID!) {
+    events: joinChatroom(chatroomID: $chatroomID, sessionID: $sessionID) {
       type
       sender
       recipient
@@ -13,6 +23,8 @@ export const JOIN_CHATROOM_SUBSCRIPTION = gql`
         name
         members {
           id
+          userID
+          isHuman
         }
       }
     }
@@ -24,11 +36,12 @@ export interface JoinChatroomSubscriptionResult {
 }
 
 export interface JoinChatroomSubscriptionVariables {
-  chatroomId: string;
+  chatroomID: string;
+  sessionID: string;
 }
 
 export const useJoinChatroomSubscription = (
-  chatroomId: string,
+  chatroomID: string,
   opts: SubscriptionHookOptions<
     JoinChatroomSubscriptionResult,
     JoinChatroomSubscriptionVariables
@@ -37,7 +50,10 @@ export const useJoinChatroomSubscription = (
   useSubscription<
     JoinChatroomSubscriptionResult,
     JoinChatroomSubscriptionVariables
-  >(JOIN_CHATROOM_SUBSCRIPTION, { variables: { chatroomId }, ...opts });
+  >(JOIN_CHATROOM_SUBSCRIPTION, {
+    variables: { chatroomID, sessionID: SESSION_ID },
+    ...opts
+  });
 
 export const TIME_SUBSCRIPTION = gql`
   subscription {
