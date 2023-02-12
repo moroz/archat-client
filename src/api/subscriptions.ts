@@ -25,6 +25,8 @@ export const JOIN_CHATROOM_SUBSCRIPTION = gql`
           id
           userID
           isHuman
+          sessionID
+          displayName
         }
       }
     }
