@@ -24,7 +24,6 @@ interface ChatroomMember {
 }
 
 const ChatroomView: React.FC<Props> = () => {
-  const [subscriptionData, setSubscriptionData] = useState<any[]>([]);
   const [chatroom, setChatroom] = useState<Chatroom | null>(null);
   const { id } = useParams();
   useJoinChatroomSubscription(id!, {
@@ -32,10 +31,28 @@ const ChatroomView: React.FC<Props> = () => {
     onData: (data) => {
       const event = data.data.data?.events;
       if (!event) return;
-      if (event.type === "INITIAL_DATA") {
-        setChatroom(event.chatroom);
-      } else {
-        setSubscriptionData((sd) => [...sd, event]);
+      console.log(event);
+      switch (event.type) {
+        case "INITIAL_DATA": {
+          setChatroom(event.chatroom);
+          break;
+        }
+
+        case "PEER_LEFT": {
+          const id = event.sender;
+          const newMembers = (chatroom?.members ?? []).filter(
+            (m) => m.id !== id
+          );
+          setChatroom({ ...chatroom!, members: newMembers });
+        }
+
+        case "PEER_JOINED": {
+          setChatroom(event.chatroom);
+        }
+
+        default: {
+          console.log(event);
+        }
       }
     }
   });
